@@ -111,6 +111,9 @@ return {
   ["break"] = function(self, node)
     return "break"
   end,
+  test = function(self, node)
+    return "print('Hello World!')"
+  end,
   ["if"] = function(self, node)
     local cond, block = node[2], node[3]
     local root

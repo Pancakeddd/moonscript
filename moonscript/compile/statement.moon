@@ -54,6 +54,9 @@ import unpack from require "moonscript.util"
   break: (node) =>
     "break"
 
+  test: (node) =>
+    "print('Hello World!')"
+
   if: (node) =>
     cond, block = node[2], node[3]
     root = with @block @line "if ", @value(cond), " then"

@@ -112,7 +112,7 @@ build_grammar = wrap_env debug_grammar, (root) ->
     Line: (CheckIndent * Statement + Space * L(Stop))
 
     Statement: pos(
-        Import + While + With + For + ForEach + Switch + Return +
+        TestThing + Import + While + With + For + ForEach + Switch + Return +
         Local + Export + BreakLoop +
         Ct(ExpList) * (Update + Assign)^-1 / format_assign
       ) * Space * ((
@@ -139,6 +139,7 @@ build_grammar = wrap_env debug_grammar, (root) ->
     BreakLoop: Ct(key"break"/trim) + Ct(key"continue"/trim)
 
     Return: key"return" * (ExpListLow/mark"explist" + C"") / mark"return"
+    TestThing: key"test" / mark"test"
 
     WithExp: Ct(ExpList) * Assign^-1 / format_assign
     With: key"with" * DisableDo * ensure(WithExp, PopDo) * key"do"^-1 * Body / mark"with"
