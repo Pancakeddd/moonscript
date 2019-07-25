@@ -112,7 +112,7 @@ build_grammar = wrap_env debug_grammar, (root) ->
     Line: (CheckIndent * Statement + Space * L(Stop))
 
     Statement: pos(
-        TestThing + Import + While + With + For + ForEach + Switch + Return +
+        Import + While + With + For + ForEach + Switch + Return + Insert +
         Local + Export + BreakLoop +
         Ct(ExpList) * (Update + Assign)^-1 / format_assign
       ) * Space * ((
@@ -149,6 +149,7 @@ build_grammar = wrap_env debug_grammar, (root) ->
     SwitchBlock: EmptyLine^0 * Advance * Ct(SwitchCase * (Break^1 * SwitchCase)^0 * (Break^1 * SwitchElse)^-1) * PopIndent
     SwitchCase: key"when" * Ct(ExpList) * key"then"^-1 * Body / mark"case"
     SwitchElse: key"else" * Body / mark"else"
+    Insert: Exp * sym"<-" * Ct(ExpList) / mark"insertv"
 
     IfCond: Exp * Assign^-1 / format_single_assign
 
@@ -186,6 +187,8 @@ build_grammar = wrap_env debug_grammar, (root) ->
     Assignable: Cmt(Chain, check_assignable) + Name + SelfName
     Exp: Ct(Value * (BinaryOperator * Value)^0) / flatten_or_mark"exp"
 
+    
+
     SimpleValue:
       If + Unless +
       Switch +
@@ -197,6 +200,7 @@ build_grammar = wrap_env debug_grammar, (root) ->
       sym"#" * Exp / mark"length" +
       sym"~" * Exp / mark"bitnot" +
       key"not" * Exp / mark"not" +
+      sym"?" * Exp/ mark"nilcheck" +
       TblComprehension +
       TableLit +
       Comprehension +

@@ -23,6 +23,9 @@ string_chars = {
 
   -- list of values separated by binary operators
   exp: (node) =>
+    print "aslard?"
+    for k, v in pairs node
+      print k, v
     _comp = (i, value) ->
       if i % 2 == 1 and value == "!="
         value = "~="
@@ -169,6 +172,9 @@ string_chars = {
 
   temp_name: (node, ...) =>
     node\get_name self, ...
+
+  nilcheck: (node) =>
+    @line @value(node[2]), " == nil"
 
   number: (node) =>
     node[2]

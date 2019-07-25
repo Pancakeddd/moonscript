@@ -54,9 +54,17 @@ import unpack from require "moonscript.util"
   break: (node) =>
     "break"
 
-  test: (node) =>
-    "print('Hello World!')"
-
+  insertv: (node) =>
+    name, exp = unpack node, 2
+    with @line!
+      n = @value(name)
+      \append n
+      \append "[#"
+      \append n
+      \append "+1]"
+      \append " = "
+      \append_list [@value v for v in *exp], ", "
+    
   if: (node) =>
     cond, block = node[2], node[3]
     root = with @block @line "if ", @value(cond), " then"

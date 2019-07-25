@@ -111,8 +111,28 @@ return {
   ["break"] = function(self, node)
     return "break"
   end,
-  test = function(self, node)
-    return "print('Hello World!')"
+  insertv = function(self, node)
+    local name, exp = unpack(node, 2)
+    do
+      local _with_0 = self:line()
+      local n = self:value(name)
+      _with_0:append(n)
+      _with_0:append("[#")
+      _with_0:append(n)
+      _with_0:append("+1]")
+      _with_0:append(" = ")
+      _with_0:append_list((function()
+        local _accum_0 = { }
+        local _len_0 = 1
+        for _index_0 = 1, #exp do
+          local v = exp[_index_0]
+          _accum_0[_len_0] = self:value(v)
+          _len_0 = _len_0 + 1
+        end
+        return _accum_0
+      end)(), ", ")
+      return _with_0
+    end
   end,
   ["if"] = function(self, node)
     local cond, block = node[2], node[3]

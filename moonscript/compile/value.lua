@@ -28,6 +28,10 @@ return {
     end
   end,
   exp = function(self, node)
+    print("aslard?")
+    for k, v in pairs(node) do
+      print(k, v)
+    end
     local _comp
     _comp = function(i, value)
       if i % 2 == 1 and value == "!=" then
@@ -282,6 +286,9 @@ return {
   end,
   temp_name = function(self, node, ...)
     return node:get_name(self, ...)
+  end,
+  nilcheck = function(self, node)
+    return self:line(self:value(node[2]), " == nil")
   end,
   number = function(self, node)
     return node[2]
