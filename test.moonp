@@ -1,6 +1,8 @@
-macro update
-  table.insert node[1][2], {"dt"}
-  return quote love.update = `node[1]
+macro create_require_loader
+  return quote
+    setmetatable {}, {
+      __index: (k) =>
+        require "#{`node[1]}.#{k}"
+    }
 
-update ->
-  love.graphics.draw whatever
+data_loader = create_require_loader "data"

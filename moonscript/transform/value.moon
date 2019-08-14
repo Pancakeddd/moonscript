@@ -169,7 +169,7 @@ Transformer {
         code ..= f
       print code
       
-      builder = setmetatable {
+      builder_functions = {
         literal: (x) ->
           z = parse_str x
           @transform.statement z[1] if z
@@ -178,14 +178,20 @@ Transformer {
           if ntype(x) == "string"
             return "\"#{x[3]}\""
           x[2]
-      }, {
-        __index: (t, k) ->
-          unless t[k]
-            (self, ...) ->
-              return {k, ...}
-          else
-            t[k]
+
+        dump: (x) ->
+          print dump x
       }
+
+      builder = setmetatable {}, {
+        __index: (t, k) ->
+          unless builder_functions[k]
+            (...) ->
+              return {k, unpack {...}}
+          else
+            builder_functions[k]
+      }
+      print loadstring(code)
       mfun = loadstring(code)!
       return mfun builder, node[#node][2]
       

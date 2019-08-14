@@ -258,7 +258,7 @@ return Transformer({
         code = code .. f
       end
       print(code)
-      local builder = setmetatable({
+      local builder_functions = {
         literal = function(x)
           z = parse_str(x)
           if z then
@@ -270,21 +270,28 @@ return Transformer({
             return "\"" .. tostring(x[3]) .. "\""
           end
           return x[2]
+        end,
+        dump = function(x)
+          return print(dump(x))
         end
-      }, {
+      }
+      local builder = setmetatable({ }, {
         __index = function(t, k)
-          if not (t[k]) then
-            return function(self, ...)
+          if not (builder_functions[k]) then
+            return function(...)
               return {
                 k,
-                ...
+                unpack({
+                  ...
+                })
               }
             end
           else
-            return t[k]
+            return builder_functions[k]
           end
         end
       })
+      print(loadstring(code))
       local mfun = loadstring(code)()
       return mfun(builder, node[#node][2])
     end

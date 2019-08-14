@@ -116,6 +116,9 @@ dumpsimple = function(what, self)
     if what[1] == "quoteinsert" then
       return table.concat(self:value(what[2]))
     end
+    if #what < 1 then
+      return "{}"
+    end
     local s = "{"
     for k, v in pairs(what) do
       if k ~= -1 then
@@ -125,6 +128,9 @@ dumpsimple = function(what, self)
     s = string.sub(s, 1, -3) .. "}"
     return s
   elseif 'string' == _exp_0 then
+    if what == "\"" then
+      return '"\\""'
+    end
     return "\"" .. tostring(what) .. "\""
   end
   return tostring(what)

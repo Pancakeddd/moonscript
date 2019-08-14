@@ -1,3 +1,5 @@
-return love.update = function(dt)
-  return love.graphics.draw(whatever)
-end
+local z = setmetatable({ }, {
+  __index = function(self, k)
+    return require(tostring("data") .. "." .. tostring(k))
+  end
+})

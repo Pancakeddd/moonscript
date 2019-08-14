@@ -80,14 +80,17 @@ dumpsimple = (what, self) ->
   switch type(what)
     when 'table'
       if what[1] == "quoteinsert"
-        
         return table.concat @value what[2]
+      if #what < 1
+        return "{}"
       s = "{"
       for k, v in pairs what
         s ..= dumpsimple(v, @)..", " if k != -1
       s = string.sub(s, 1, -3) .. "}"
       return s
     when 'string'
+      if what == "\""
+        return '"\\""'
       return "\"#{what}\""
   return tostring(what)
 
