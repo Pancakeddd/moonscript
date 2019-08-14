@@ -76,6 +76,21 @@ dump = (what) ->
 
   _dump what
 
+dumpsimple = (what, self) ->
+  switch type(what)
+    when 'table'
+      if what[1] == "quoteinsert"
+        
+        return table.concat @value what[2]
+      s = "{"
+      for k, v in pairs what
+        s ..= dumpsimple(v, @)..", " if k != -1
+      s = string.sub(s, 1, -3) .. "}"
+      return s
+    when 'string'
+      return "\"#{what}\""
+  return tostring(what)
+
 
 debug_posmap = (posmap, moon_code, lua_code) ->
   tuples = [{k, v} for k, v in pairs posmap]
@@ -132,6 +147,6 @@ safe_module = (name, tbl) ->
 
 {
   :moon, :pos_to_line, :get_closest_line, :get_line, :trim, :split, :dump,
-  :debug_posmap, :getfenv, :setfenv, :get_options, :unpack, :safe_module
+  :debug_posmap, :getfenv, :setfenv, :get_options, :unpack, :safe_module, :dumpsimple
 }
 

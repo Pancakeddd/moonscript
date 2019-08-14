@@ -109,6 +109,26 @@ dump = function(what)
   end
   return _dump(what)
 end
+local dumpsimple
+dumpsimple = function(what, self)
+  local _exp_0 = type(what)
+  if 'table' == _exp_0 then
+    if what[1] == "quoteinsert" then
+      return table.concat(self:value(what[2]))
+    end
+    local s = "{"
+    for k, v in pairs(what) do
+      if k ~= -1 then
+        s = s .. (dumpsimple(v, self) .. ", ")
+      end
+    end
+    s = string.sub(s, 1, -3) .. "}"
+    return s
+  elseif 'string' == _exp_0 then
+    return "\"" .. tostring(what) .. "\""
+  end
+  return tostring(what)
+end
 local debug_posmap
 debug_posmap = function(posmap, moon_code, lua_code)
   local tuples
@@ -209,5 +229,6 @@ return {
   setfenv = setfenv,
   get_options = get_options,
   unpack = unpack,
-  safe_module = safe_module
+  safe_module = safe_module,
+  dumpsimple = dumpsimple
 }

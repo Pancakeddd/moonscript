@@ -28,10 +28,6 @@ return {
     end
   end,
   exp = function(self, node)
-    print("aslard?")
-    for k, v in pairs(node) do
-      print(k, v)
-    end
     local _comp
     _comp = function(i, value)
       if i % 2 == 1 and value == "!=" then

@@ -6,11 +6,18 @@ import Accumulator, default_accumulator from require "moonscript.transform.accum
 import lua_keywords from require "moonscript.data"
 
 import Run, transform_last_stm, implicitly_return, chain_is_stub from require "moonscript.transform.statements"
+parse_str = require("moonscript.parse").string
 
 import construct_comprehension from require "moonscript.transform.comprehension"
 
 import insert from table
-import unpack from require "moonscript.util"
+import unpack, dump, dumpsimple from require "moonscript.util"
+-- Reverses table
+reverse = (t) ->
+  nt = {}
+  for i = #t, 1, -1
+    nt[#t-i+1] = t[i] 
+  nt
 
 Transformer {
   for: default_accumulator
@@ -102,8 +109,87 @@ Transformer {
   switch: (node) =>
     build.block_exp { node }
 
+  pipe: (node) =>
+    -- For every value in the pipe
+    z = node[2]
+    for v in *node[2,]
+      is_call = false
+      
+      -- Does have call?
+      for th in *v
+        if th[1] and th[1] == "call"
+          is_call = true
+      
+      -- If this is a simple pipe aka. "10 |> z"
+      if (v[1] == "ref" or (v[1] == "chain" and v[2][1] == "ref" and not is_call)) and _index_0 > 2
+        previous_node = node[_index_0-1]
+        zy = z
+        z = {"chain"}
+        for vz in *v[2,]
+          z[#z+1] = vz
+        z[#z+1] = {"call", {zy}}
+        --print dump z
+      -- Is a call pipe aka. "'thing' |> string.sub(3, 3)"
+      elseif _index_0 > 2
+        previous_node = node[_index_0-1]
+        zy = z
+        z = {"chain"}
+        for vz in *v[2,]
+          break if vz[1] and vz[1] == "call"
+          z[#z+1] = vz
+
+        call = nil
+        -- Find call
+        for th in *v
+          if th[1] and th[1] == "call"
+            call = th
+
+        args = {zy}
+        for arg in *call[2]
+          args[#args+1] = arg
+        z[#z+1] = {"call", args}
+    z
+
+  quote: (node) =>
+    dumpsimple node[2][1], @
+
   -- pull out colon chain
   chain: (node) =>
+
+    if @macros\is_macro node[2][2]
+      mname = node[2][2]
+      macro = @macros\get_macro mname
+      
+      z = with @block @line "return function(builder, node)" 
+        \stms macro
+
+      rend = z\render(@lines!)\flatten!
+      code = ""
+      for f in *rend
+        code ..= f
+      print code
+      
+      builder = setmetatable {
+        literal: (x) ->
+          z = parse_str x
+          @transform.statement z[1] if z
+
+        value: (x) ->
+          if ntype(x) == "string"
+            return "\"#{x[3]}\""
+          x[2]
+      }, {
+        __index: (t, k) ->
+          unless t[k]
+            (self, ...) ->
+              return {k, ...}
+          else
+            t[k]
+      }
+      mfun = loadstring(code)!
+      return mfun builder, node[#node][2]
+      
+
     -- escape lua keywords used in dot accessors
     for i=2,#node
       part = node[i]

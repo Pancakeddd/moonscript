@@ -19,6 +19,8 @@ indent_char = "  "
 
 local Line, DelayedLine, Lines, Block, RootBlock
 
+Macros = require 'moonscript.macro'
+
 -- a buffer for building up lines
 class Lines
   new: =>
@@ -163,6 +165,7 @@ class Block
 
   value_compilers: value_compilers
   statement_compilers: statement_compilers
+  macros: Macros
 
   __tostring: =>
     h = if "string" == type @header
@@ -324,6 +327,9 @@ class Block
   block: (header, footer) =>
     Block self, header, footer
 
+  lines: =>
+    Lines!
+
   line: (...) =>
     with Line!
       \append ...
@@ -349,7 +355,7 @@ class Block
     else
       node[1]
 
-    fn = @value_compilers[action]
+    fn = @value_compilers[action] or @statement_compilers[action] -- hack! replace or @statement_compiles[action] with something better. (because of macros)
     unless fn
       error {
         "compile-error"
@@ -375,6 +381,9 @@ class Block
   stm: (node, ...) =>
     return if not node -- skip blank statements
     node = @transform.statement node
+
+    if ntype(node) == "macro"
+      @macros\add_macro node[2], node[3]
 
     result = if fn = @statement_compilers[ntype(node)]
       fn @, node, ...

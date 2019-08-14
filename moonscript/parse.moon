@@ -112,7 +112,7 @@ build_grammar = wrap_env debug_grammar, (root) ->
     Line: (CheckIndent * Statement + Space * L(Stop))
 
     Statement: pos(
-        Import + While + With + For + ForEach + Switch + Return + Insert +
+        Import + While + With + For + ForEach + Switch + Return + Insert + Macro +
         Local + Export + BreakLoop +
         Ct(ExpList) * (Update + Assign)^-1 / format_assign
       ) * Space * ((
@@ -139,7 +139,6 @@ build_grammar = wrap_env debug_grammar, (root) ->
     BreakLoop: Ct(key"break"/trim) + Ct(key"continue"/trim)
 
     Return: key"return" * (ExpListLow/mark"explist" + C"") / mark"return"
-    TestThing: key"test" / mark"test"
 
     WithExp: Ct(ExpList) * Assign^-1 / format_assign
     With: key"with" * DisableDo * ensure(WithExp, PopDo) * key"do"^-1 * Body / mark"with"
@@ -149,7 +148,11 @@ build_grammar = wrap_env debug_grammar, (root) ->
     SwitchBlock: EmptyLine^0 * Advance * Ct(SwitchCase * (Break^1 * SwitchCase)^0 * (Break^1 * SwitchElse)^-1) * PopIndent
     SwitchCase: key"when" * Ct(ExpList) * key"then"^-1 * Body / mark"case"
     SwitchElse: key"else" * Body / mark"else"
-    Insert: Exp * sym"<-" * Ct(ExpList) / mark"insertv"
+    Insert: Assignable * sym"<-" * Ct(ExpList) / mark"insertv"
+    Pipe: sym"|>" * ((ChainValue) * Pipe^0)
+    Macro: key"macro" * Name * Body / mark"macro"
+    Quote: key"quote" * Body / mark"quote"
+    QuoteInsert: sym"`" * ChainValue / mark"quoteinsert"
 
     IfCond: Exp * Assign^-1 / format_single_assign
 
@@ -191,6 +194,7 @@ build_grammar = wrap_env debug_grammar, (root) ->
 
     SimpleValue:
       If + Unless +
+      Quote +
       Switch +
       With +
       ClassDecl +
@@ -211,9 +215,10 @@ build_grammar = wrap_env debug_grammar, (root) ->
     ChainValue: (Chain + Callable) * Ct(InvokeArgs^-1) / join_chain
 
     Value: pos(
+      (ChainValue + SimpleValue + String) * Pipe / mark"pipe" +
       SimpleValue +
       Ct(KeyValueList) / mark"table" +
-      ChainValue +
+      QuoteInsert + ChainValue +
       String)
 
     SliceValue: Exp

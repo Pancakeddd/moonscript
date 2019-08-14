@@ -133,6 +133,9 @@ import unpack from require "moonscript.util"
       @declare names
     nil
 
+  macro: (node) =>
+    nil
+
   run: (code) =>
     code\call self
     nil

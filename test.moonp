@@ -1,0 +1,6 @@
+macro update
+  table.insert node[1][2], {"dt"}
+  return quote love.update = `node[1]
+
+update ->
+  love.graphics.draw whatever

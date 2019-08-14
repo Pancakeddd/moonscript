@@ -25,6 +25,7 @@ pos_to_line, get_closest_line, trim, unpack = util.pos_to_line, util.get_closest
 local mtype = util.moon.type
 local indent_char = "  "
 local Line, DelayedLine, Lines, Block, RootBlock
+local Macros = require('moonscript.macro')
 do
   local _class_0
   local _base_0 = {
@@ -261,6 +262,7 @@ do
     export_proper = false,
     value_compilers = value_compilers,
     statement_compilers = statement_compilers,
+    macros = Macros,
     __tostring = function(self)
       local h
       if "string" == type(self.header) then
@@ -439,7 +441,8 @@ do
         self.next:render(buffer)
       else
         if #self._lines == 0 and "string" == type(buffer[#buffer]) then
-          buffer[#buffer] = buffer[#buffer] .. (" " .. (unpack(Lines():add(self.footer))))
+          local _update_0 = #buffer
+          buffer[_update_0] = buffer[_update_0] .. (" " .. (unpack(Lines():add(self.footer))))
         else
           buffer:add(self._lines)
           buffer:add(self.footer)
@@ -450,6 +453,9 @@ do
     end,
     block = function(self, header, footer)
       return Block(self, header, footer)
+    end,
+    lines = function(self)
+      return Lines()
     end,
     line = function(self, ...)
       do
@@ -480,7 +486,7 @@ do
       else
         action = node[1]
       end
-      local fn = self.value_compilers[action]
+      local fn = self.value_compilers[action] or self.statement_compilers[action]
       if not (fn) then
         error({
           "compile-error",
@@ -523,6 +529,9 @@ do
         return 
       end
       node = self.transform.statement(node)
+      if ntype(node) == "macro" then
+        self.macros:add_macro(node[2], node[3])
+      end
       local result
       do
         local fn = self.statement_compilers[ntype(node)]

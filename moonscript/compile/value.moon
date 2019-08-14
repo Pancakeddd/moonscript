@@ -23,9 +23,6 @@ string_chars = {
 
   -- list of values separated by binary operators
   exp: (node) =>
-    print "aslard?"
-    for k, v in pairs node
-      print k, v
     _comp = (i, value) ->
       if i % 2 == 1 and value == "!="
         value = "~="

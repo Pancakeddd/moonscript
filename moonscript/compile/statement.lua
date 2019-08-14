@@ -245,6 +245,9 @@ return {
     end
     return nil
   end,
+  macro = function(self, node)
+    return nil
+  end,
   run = function(self, code)
     code:call(self)
     return nil
