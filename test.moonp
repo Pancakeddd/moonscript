@@ -1,7 +1,6 @@
 macro require_as
   str = (x) ->
     return "\"#{builder.value x}\""
-
   k = str node[1]
   return quote `node[1] = require `k
 
@@ -17,7 +16,7 @@ require_as lpeg
 mark = (name, ...) ->
   {name, ...}
 
-lpeg_define_grammar grammar, {
+lpeg_define_grammar grammar, {}, {
   main: lpeg.V("factor")
   factor:  z
 }
