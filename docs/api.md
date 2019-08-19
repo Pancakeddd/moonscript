@@ -13,7 +13,7 @@ After installing MoonScript, you can include the `moonscript` module to make
 any Lua script MoonScript aware.
 
 ```lua
-require "moonscript"
+require "moonscriptplus"
 ```
 
 After `moonscript` is required, Lua's package loader is updated to search for
@@ -42,7 +42,7 @@ MoonScript modules.
 ## `moonscript.base` Module
 
 ```moononly
-moonscript = require "moonscript.base"
+moonscript = require "moonscriptplus.base"
 ```
 
 This module contains an assortment of functions for loading and compiling
@@ -54,7 +54,7 @@ they load MoonScript code instead of Lua code.
 
 
 ```moononly
-moonscript = require "moonscript.base"
+moonscript = require "moonscriptplus.base"
 
 fn = moonscript.loadstring 'print "hi!"'
 fn!
@@ -66,7 +66,7 @@ makes it so the file does not implicitly return its last statement.
 
 
 ```moononly
-moonscript = require "moonscript.base"
+moonscript = require "moonscriptplus.base"
 
 fn = moonscript.loadstring "10"
 print fn! -- prints "10"
@@ -81,7 +81,7 @@ table. If there are any errors then `nil` and the error message are returned.
 
 
 ```moononly
-import to_lua from require "moonscript.base"
+import to_lua from require "moonscriptplus.base"
 
 lua_code, line_tabel = to_lua [[
 x = 124
@@ -114,8 +114,8 @@ Here is a quick example of how you would compile a MoonScript string to a Lua
 String (This is effectively the same as the `to_lua` function described above):
 
 ```moononly
-parse = require "moonscript.parse"
-compile = require "moonscript.compile"
+parse = require "moonscriptplus.parse"
+compile = require "moonscriptplus.compile"
 
 moon_code = [[(-> print "hello world")!]]
 

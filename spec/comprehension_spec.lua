@@ -1,5 +1,5 @@
 local unpack
-unpack = require("moonscript.util").unpack
+unpack = require("moonscriptplus.util").unpack
 describe("comprehension", function()
   it("should double every number", function()
     local input = {

@@ -1,12 +1,12 @@
 argparse = require "argparse"
 
-moonscript = require "moonscript.base"
-util = require "moonscript.util"
-errors = require "moonscript.errors"
+moonscript = require "moonscriptplus.base"
+util = require "moonscriptplus.util"
+errors = require "moonscriptplus.errors"
 
 unpack = util.unpack
 
-argparser = argparse! name: "moon"
+argparser = argparse! name: "moonp"
 
 argparser\argument "script"
 argparser\argument("args")\args "*"
@@ -70,7 +70,7 @@ run = ->
 
   if opts.coverage
     print "starting coverage"
-    coverage = require "moonscript.cmd.coverage"
+    coverage = require "moonscriptplus.cmd.coverage"
     cov = coverage.CodeCoverage!
     cov\start!
 

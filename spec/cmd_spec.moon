@@ -7,7 +7,7 @@ describe "moonc", ->
   local moonc
 
   dev_loaded = with_dev ->
-    moonc = require "moonscript.cmd.moonc"
+    moonc = require "moonscriptplus.cmd.moonc"
 
   same = (fn, a, b) ->
     assert.same b, fn a
@@ -46,8 +46,8 @@ describe "moonc", ->
     assert.same "compiled/test.lua", p "/home/leafo/test.moon", "compiled"
     assert.same "/compiled/test.lua", p "/home/leafo/test.moon", "/compiled/"
 
-    assert.same "moonscript/hello.lua", p "moonscript/hello.moon", nil, "moonscript"
-    assert.same "out/moonscript/hello.lua", p "moonscript/hello.moon", "out", "moonscript"
+    assert.same "moonscriptplus/hello.lua", p "moonscriptplus/hello.moon", nil, "moonscriptplus"
+    assert.same "out/moonscriptplus/hello.lua", p "moonscriptplus/hello.moon", "out", "moonscriptplus"
 
     assert.same "out/moonscript/package/hello.lua",
       p "moonscript/package/hello.moon", "out", "moonscript/"
@@ -65,7 +65,7 @@ describe "moonc", ->
   describe "watcher", ->
     describe "inotify watcher", ->
       it "gets dirs", ->
-        import InotifyWacher from require "moonscript.cmd.watchers"
+        import InotifyWacher from require "moonscriptplus.cmd.watchers"
         watcher = InotifyWacher {
           {"hello.moon", "hello.lua"}
           {"cool/no.moon", "cool/no.lua"}
@@ -78,7 +78,7 @@ describe "moonc", ->
 
   describe "parse args", ->
     it "parses spec", ->
-      import parse_spec from require "moonscript.cmd.args"
+      import parse_spec from require "moonscriptplus.cmd.args"
       spec = parse_spec "lt:o:X"
       assert.same {
         X: {}
@@ -88,7 +88,7 @@ describe "moonc", ->
       }, spec
 
     it "parses arguments", ->
-      import parse_arguments from require "moonscript.cmd.args"
+      import parse_arguments from require "moonscriptplus.cmd.args"
       out, res = parse_arguments {
         "ga:p"
         print: "p"
@@ -106,19 +106,19 @@ describe "moonc", ->
     before_each ->
       dirs = {}
       package.loaded.lfs = nil
-      dev_loaded["moonscript.cmd.moonc"] = nil
+      dev_loaded["moonscriptplus.cmd.moonc"] = nil
 
       package.loaded.lfs = {
         mkdir: (dir) -> table.insert dirs, dir
         attributes: -> "directory"
       }
 
-      moonc = require "moonscript.cmd.moonc"
+      moonc = require "moonscriptplus.cmd.moonc"
 
     after_each ->
       package.loaded.lfs = nil
-      dev_loaded["moonscript.cmd.moonc"] = nil
-      moonc = require "moonscript.cmd.moonc"
+      dev_loaded["moonscriptplus.cmd.moonc"] = nil
+      moonc = require "moonscriptplus.cmd.moonc"
 
     it "should make directory", ->
       moonc.mkdir "hello/world/directory"

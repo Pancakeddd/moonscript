@@ -1,8 +1,24 @@
-macro create_require_loader
-  return quote
-    setmetatable {}, {
-      __index: (k) =>
-        require "#{`node[1]}.#{k}"
-    }
+macro require_as
+  str = (x) ->
+    return "\"#{builder.value x}\""
 
-data_loader = create_require_loader "data"
+  k = str node[1]
+  return quote `node[1] = require `k
+
+macro lpeg_define_grammar
+    literals = node[2]
+    grammar = node[3]
+    table.insert(grammar[2], 1, {quote "main"})
+    return quote 
+      `node[1] = lpeg.P(`grammar)
+
+require_as lpeg
+
+mark = (name, ...) ->
+  {name, ...}
+
+lpeg_define_grammar grammar, {
+  main: lpeg.V("factor")
+  factor:  z
+}
+

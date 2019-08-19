@@ -1,7 +1,7 @@
 local load_line_table
 load_line_table = function(chunk_name)
   local to_lua
-  to_lua = require("moonscript.base").to_lua
+  to_lua = require("moonscriptplus.base").to_lua
   if not (chunk_name:match("^@")) then
     return 
   end
@@ -13,7 +13,7 @@ load_line_table = function(chunk_name)
   if not (c) then
     return nil, ltable
   end
-  local line_tables = require("moonscript.line_tables")
+  local line_tables = require("moonscriptplus.line_tables")
   line_tables[chunk_name] = ltable
   return true
 end
@@ -21,7 +21,7 @@ return function(options)
   local busted = require("busted")
   local handler = require("busted.outputHandlers.utfTerminal")(options)
   local spec_name
-  local coverage = require("moonscript.cmd.coverage")
+  local coverage = require("moonscriptplus.cmd.coverage")
   local cov = coverage.CodeCoverage()
   busted.subscribe({
     "test",

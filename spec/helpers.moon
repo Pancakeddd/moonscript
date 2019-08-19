@@ -26,7 +26,7 @@ with_dev = (fn) ->
     _G.require = (mod) ->
       return dev_cache[mod] if dev_cache[mod]
 
-      testable = mod\match("moonscript%.") or mod == "moonscript" or
+      testable = mod\match("moonscriptplus%.") or mod == "moonscriptplus" or
         mod\match("moon%.") or mod == "moon"
 
       if testable

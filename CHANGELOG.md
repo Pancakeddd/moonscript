@@ -418,7 +418,7 @@ Fixed bug with moonloader not loading anything
 * The `moonscript` module no longer sets a global value for `moonscript` and instead returns it. You should update your code:
 
 ```moonscript
-moonscript = require "moonscript"
+moonscript = require "moonscriptplus"
 ```
 
 ## New Things

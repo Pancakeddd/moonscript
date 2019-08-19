@@ -1,10 +1,10 @@
 local argparse = require("argparse")
-local moonscript = require("moonscript.base")
-local util = require("moonscript.util")
-local errors = require("moonscript.errors")
+local moonscript = require("moonscriptplus.base")
+local util = require("moonscriptplus.util")
+local errors = require("moonscriptplus.errors")
 local unpack = util.unpack
 local argparser = argparse()({
-  name = "moon"
+  name = "moonp"
 })
 argparser:argument("script")
 argparser:argument("args"):args("*")
@@ -84,7 +84,7 @@ run = function()
   local err, trace, cov
   if opts.coverage then
     print("starting coverage")
-    local coverage = require("moonscript.cmd.coverage")
+    local coverage = require("moonscriptplus.cmd.coverage")
     cov = coverage.CodeCoverage()
     cov:start()
   end

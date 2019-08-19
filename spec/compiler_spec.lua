@@ -1,5 +1,5 @@
 local Block
-Block = require("moonscript.compile").Block
+Block = require("moonscriptplus.compile").Block
 local ref, str
 do
   local _obj_0 = require("spec.factory")
@@ -51,7 +51,7 @@ do
   end
   SimpleBlock = _class_0
 end
-local value = require("moonscript.compile.value")
+local value = require("moonscriptplus.compile.value")
 return describe("moonscript.compile", function()
   local compile_node
   compile_node = function(node)

@@ -3,7 +3,7 @@ with_dev = require("spec.helpers").with_dev
 return describe("moonc", function()
   local moonc
   local dev_loaded = with_dev(function()
-    moonc = require("moonscript.cmd.moonc")
+    moonc = require("moonscriptplus.cmd.moonc")
   end)
   local same
   same = function(fn, a, b)
@@ -40,8 +40,8 @@ return describe("moonc", function()
     assert.same("/home/leafo/test.lua", p("/home/leafo/test.moon"))
     assert.same("compiled/test.lua", p("/home/leafo/test.moon", "compiled"))
     assert.same("/compiled/test.lua", p("/home/leafo/test.moon", "/compiled/"))
-    assert.same("moonscript/hello.lua", p("moonscript/hello.moon", nil, "moonscript"))
-    assert.same("out/moonscript/hello.lua", p("moonscript/hello.moon", "out", "moonscript"))
+    assert.same("moonscriptplus/hello.lua", p("moonscriptplus/hello.moon", nil, "moonscriptplus"))
+    assert.same("out/moonscriptplus/hello.lua", p("moonscriptplus/hello.moon", "out", "moonscriptplus"))
     assert.same("out/moonscript/package/hello.lua", p("moonscript/package/hello.moon", "out", "moonscript/"))
     return assert.same("/out/moonscript/package/hello.lua", p("/home/leafo/moonscript/package/hello.moon", "/out", "/home/leafo/moonscript"))
   end)
@@ -58,7 +58,7 @@ return describe("moonc", function()
     return describe("inotify watcher", function()
       return it("gets dirs", function()
         local InotifyWacher
-        InotifyWacher = require("moonscript.cmd.watchers").InotifyWacher
+        InotifyWacher = require("moonscriptplus.cmd.watchers").InotifyWacher
         local watcher = InotifyWacher({
           {
             "hello.moon",
@@ -79,7 +79,7 @@ return describe("moonc", function()
   describe("parse args", function()
     it("parses spec", function()
       local parse_spec
-      parse_spec = require("moonscript.cmd.args").parse_spec
+      parse_spec = require("moonscriptplus.cmd.args").parse_spec
       local spec = parse_spec("lt:o:X")
       return assert.same({
         X = { },
@@ -94,7 +94,7 @@ return describe("moonc", function()
     end)
     return it("parses arguments", function()
       local parse_arguments
-      parse_arguments = require("moonscript.cmd.args").parse_arguments
+      parse_arguments = require("moonscriptplus.cmd.args").parse_arguments
       local out, res = parse_arguments({
         "ga:p",
         print = "p"
@@ -115,7 +115,7 @@ return describe("moonc", function()
     before_each(function()
       dirs = { }
       package.loaded.lfs = nil
-      dev_loaded["moonscript.cmd.moonc"] = nil
+      dev_loaded["moonscriptplus.cmd.moonc"] = nil
       package.loaded.lfs = {
         mkdir = function(dir)
           return table.insert(dirs, dir)
@@ -124,12 +124,12 @@ return describe("moonc", function()
           return "directory"
         end
       }
-      moonc = require("moonscript.cmd.moonc")
+      moonc = require("moonscriptplus.cmd.moonc")
     end)
     after_each(function()
       package.loaded.lfs = nil
-      dev_loaded["moonscript.cmd.moonc"] = nil
-      moonc = require("moonscript.cmd.moonc")
+      dev_loaded["moonscriptplus.cmd.moonc"] = nil
+      moonc = require("moonscriptplus.cmd.moonc")
     end)
     return it("should make directory", function()
       moonc.mkdir("hello/world/directory")

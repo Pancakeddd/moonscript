@@ -141,8 +141,8 @@ table.sort(inputs)
 return describe("input tests", function()
   local parse, compile
   with_dev(function()
-    parse = require("moonscript.parse")
-    compile = require("moonscript.compile")
+    parse = require("moonscriptplus.parse")
+    compile = require("moonscriptplus.compile")
   end)
   for _index_0 = 1, #inputs do
     local name = inputs[_index_0]

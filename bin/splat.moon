@@ -6,7 +6,7 @@ lfs = require "lfs"
 alt_getopt = require "alt_getopt"
 
 import insert, concat from table
-import dump, split from require "moonscript.util"
+import dump, split from require "moonscriptplus.util"
 
 opts, ind = alt_getopt.get_opts arg, "l:", {
   load: "l"

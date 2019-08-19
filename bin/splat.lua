@@ -7,7 +7,7 @@ do
 end
 local dump, split
 do
-  local _obj_0 = require("moonscript.util")
+  local _obj_0 = require("moonscriptplus.util")
   dump, split = _obj_0.dump, _obj_0.split
 end
 local opts, ind = alt_getopt.get_opts(arg, "l:", {

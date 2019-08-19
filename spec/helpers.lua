@@ -27,7 +27,7 @@ with_dev = function(fn)
       if dev_cache[mod] then
         return dev_cache[mod]
       end
-      local testable = mod:match("moonscript%.") or mod == "moonscript" or mod:match("moon%.") or mod == "moon"
+      local testable = mod:match("moonscriptplus%.") or mod == "moonscriptplus" or mod:match("moon%.") or mod == "moon"
       if testable then
         local fname = assert(loader(mod), "failed to find module: " .. tostring(mod))
         dev_cache[mod] = assert(loadfile(fname))()

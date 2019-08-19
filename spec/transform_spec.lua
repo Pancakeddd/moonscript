@@ -3,7 +3,7 @@ with_dev = require("spec.helpers").with_dev
 describe("moonscript.transform.destructure", function()
   local extract_assign_names
   with_dev(function()
-    extract_assign_names = require("moonscript.transform.destructure").extract_assign_names
+    extract_assign_names = require("moonscriptplus.transform.destructure").extract_assign_names
   end)
   it("extracts names from table destructure", function()
     local des = {
@@ -93,7 +93,7 @@ return describe("moonscript.transform.statements", function()
   local last_stm, transform_last_stm, Run
   with_dev(function()
     do
-      local _obj_0 = require("moonscript.transform.statements")
+      local _obj_0 = require("moonscriptplus.transform.statements")
       last_stm, transform_last_stm, Run = _obj_0.last_stm, _obj_0.transform_last_stm, _obj_0.Run
     end
   end)

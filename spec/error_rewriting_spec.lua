@@ -5,9 +5,9 @@ do
 end
 return describe("moonscript.errors", function()
   local moonscript, errors, util, to_lua
-  moonscript = require("moonscript.base")
-  errors = require("moonscript.errors")
-  util = require("moonscript.util")
+  moonscript = require("moonscriptplus.base")
+  errors = require("moonscriptplus.errors")
+  util = require("moonscriptplus.util")
   to_lua = moonscript.to_lua
   local get_rewritten_line_no
   get_rewritten_line_no = function(fname)
@@ -18,7 +18,7 @@ return describe("moonscript.errors", function()
       error("`" .. tostring(fname) .. "` is supposed to have runtime error!")
     end
     local source = tonumber(err:match("^.-:(%d+):"))
-    local line_table = assert(require("moonscript.line_tables")["@" .. tostring(fname)], "missing line table")
+    local line_table = assert(require("moonscriptplus.line_tables")["@" .. tostring(fname)], "missing line table")
     return errors.reverse_line_number(fname, line_table, source, { })
   end
   describe("error rewriting", function()

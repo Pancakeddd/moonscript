@@ -1,1 +1,1 @@
-return require "moonscript.init"
+return require "moonscriptplus.init"
